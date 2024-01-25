@@ -48,7 +48,7 @@ export default function ListOfRecordings({ datas }) {
                 <td className="border p-4">{`Session #${item?.id}`}</td>
                 <td className="border p-4">{item?.timeStamp}</td>
                 <td className="border p-4">
-                  {`${item?.length.minutes} min : ${item?.length.seconds} sec`}{" "}
+                  {`${item?.length.current.minutes} min : ${item?.length.current.seconds} sec`}{" "}
                 </td>
                 <td
                   className={`border p-4 ${

@@ -11,10 +11,11 @@ export default function AudioRecord() {
   );
   const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [counterId, setCounterId] = useState(1);
+  const timerRef = useRef(timer);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (isRecording) {
+    if (isRecording) {
+        const intervalId = setInterval(() => {
         setTimer((prevTimer) => {
           const newSeconds = (prevTimer.seconds + 1) % 60;
           const newMinutes =
@@ -23,12 +24,19 @@ export default function AudioRecord() {
               : prevTimer.minutes;
           return { minutes: newMinutes, seconds: newSeconds };
         });
+      }, 1000);
+      return () => clearInterval(intervalId);
       }
-    }, 1000);
+  
     verifyMinute();
-    return () => clearInterval(intervalId);
+    setTimer((prevTimer) => {
+      timerRef.current = prevTimer;
+      return prevTimer;
+    });
+   
   }, [isRecording, timer]);
 
+  
   navigator.permissions
     .query({ name: "microphone" })
     .then(function (queryResults) {
@@ -57,7 +65,7 @@ export default function AudioRecord() {
         day: "numeric",
         month: "numeric",
         year: "numeric",
-      });
+      })
       
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -80,7 +88,7 @@ export default function AudioRecord() {
           link: audioUrl,
           timeStamp: dateStart,
           audio: audioBlob,
-          length: timer,
+          length: timerRef,
           statusAudio: false,
         };
 
@@ -122,11 +130,12 @@ export default function AudioRecord() {
     }
   };
 
+
   return (
     <div className="">
       <div className="flex flex-col gap-8 mt-10">
         <h1 className="text-4xl font-bold  text-gray-800">
-          Senior Frontend Engineer Assignment
+          Senior Frontend Engineer Assignment Elie MULUMBA 
         </h1>
 
         <div>
